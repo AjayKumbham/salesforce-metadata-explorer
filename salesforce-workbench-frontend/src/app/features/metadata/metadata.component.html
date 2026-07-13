@@ -1,0 +1,213 @@
+<div class="metadata-page">
+  
+  <header class="page-header">
+    <div class="header-left">
+      <a routerLink="/dashboard" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Dashboard
+      </a>
+      <div class="header-title">
+        <h1>Metadata Explorer</h1>
+        <span class="subtitle">Browse types and components in your Salesforce org</span>
+      </div>
+    </div>
+    <div class="header-stats" *ngIf="!loadingTypes() && types().length > 0">
+      <span class="stat-badge" *ngIf="selectedType()">{{ selectedType()?.xmlName }}</span>
+      <span class="stat-badge" *ngIf="selectedType()">{{ totalElements() }} Components</span>
+      <button class="btn-sync" (click)="sync()" [disabled]="syncing()">
+        <span class="sync-icon" [class.spinning]="syncing()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+        </span>
+        {{ syncing() ? 'Syncing...' : 'Sync with Salesforce' }}
+      </button>
+    </div>
+  </header>
+
+  
+  <div class="explorer-layout">
+
+    
+    <aside class="panel types-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Metadata Types</h2>
+        <div class="search-box">
+          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Filter types..."
+            [(ngModel)]="typeSearchQuery"
+            [ngModel]="typeSearchQuery()"
+            (ngModelChange)="typeSearchQuery.set($event)"
+          />
+        </div>
+      </div>
+
+      
+      <div class="loading-state" *ngIf="loadingTypes()">
+        <div class="spinner"></div>
+        <p>Loading metadata types...</p>
+      </div>
+
+      
+      <div class="error-state" *ngIf="typesError()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        <p>{{ typesError() }}</p>
+        <button class="btn-retry" (click)="loadTypes()">Retry</button>
+      </div>
+
+      
+      <ul class="types-list" *ngIf="!loadingTypes() && !typesError()">
+        <li
+          *ngFor="let type of filteredTypes()"
+          class="type-item"
+          [class.active]="selectedType()?.xmlName === type.xmlName"
+          (click)="selectType(type)"
+        >
+          <div class="type-name">{{ type.xmlName }}</div>
+          <div class="type-meta">
+            <span class="type-badge" *ngIf="type.inFolder">Folder</span>
+          </div>
+        </li>
+        <li class="empty-filter" *ngIf="filteredTypes().length === 0 && types().length > 0">
+          No types match "{{ typeSearchQuery() }}"
+        </li>
+      </ul>
+    </aside>
+
+    
+    <main class="panel components-panel">
+
+      
+      <div class="empty-selection" *ngIf="!selectedType() && !loadingTypes()">
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </div>
+        <h3>Select a Metadata Type</h3>
+        <p>Choose a type from the list on the left to see its components</p>
+      </div>
+
+      
+      <div class="panel-header" *ngIf="selectedType()">
+        <div class="components-title-row">
+          <h2 class="panel-title">{{ selectedType()?.xmlName }}</h2>
+        </div>
+        <div class="type-inline-details">
+          <span class="inline-detail"><span class="label">Dir:</span> {{ selectedType()?.directoryName || '—' }}</span>
+          <span class="inline-detail"><span class="label">Suffix:</span> {{ selectedType()?.suffix || '—' }}</span>
+          <span class="inline-detail"><span class="label">In Folder:</span> {{ selectedType()?.inFolder ? 'Yes' : 'No' }}</span>
+          <span class="inline-detail"><span class="label">MetaFile:</span> {{ selectedType()?.metaFile ? 'Yes' : 'No' }}</span>
+        </div>
+      </div>
+
+      
+      <div class="components-toolbar" *ngIf="selectedType()">
+        <div class="search-box">
+          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Filter components..."
+            [ngModel]="componentSearchQuery()"
+            (ngModelChange)="onSearchChange($event)"
+          />
+        </div>
+      </div>
+
+      
+      <div class="loading-state" *ngIf="loadingComponents()">
+        <div class="spinner"></div>
+        <p>Loading components...</p>
+      </div>
+
+      
+      <div class="error-state" *ngIf="componentsError() && !loadingComponents()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        <p>{{ componentsError() }}</p>
+        <button class="btn-retry" (click)="selectedType() && selectType(selectedType()!)">Retry</button>
+      </div>
+
+      
+      <div class="empty-components" *ngIf="!loadingComponents() && !componentsError() && selectedType() && components().length === 0">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+        <p>No components found for <strong>{{ selectedType()?.xmlName }}</strong></p>
+      </div>
+
+      
+      <div class="table-wrapper" *ngIf="!loadingComponents() && !componentsError() && components().length > 0">
+        <table class="components-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>File Path</th>
+              <th>Created Date</th>
+              <th>Last Modified</th>
+              <th>Modified By</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let comp of components()">
+              <td class="comp-name">{{ comp.fullName }}</td>
+              <td class="file-cell">
+                <span class="file-path" *ngIf="comp.fileName" [title]="comp.fileName">{{ comp.fileName }}</span>
+                <span class="dim" *ngIf="!comp.fileName">—</span>
+              </td>
+              <td class="date-cell">{{ formatDate(comp.createdDate) }}</td>
+              <td class="date-cell">{{ formatDate(comp.lastModifiedDate) }}</td>
+              <td class="dim">{{ comp.lastModifiedByName || '—' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-footer pagination-controls">
+          <div class="page-size-selector">
+            <label for="pageSize">Per page:</label>
+            <select id="pageSize" [value]="pageSize()" (change)="onPageSizeChange($event)">
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+            </select>
+          </div>
+          
+          <div class="pagination-info">
+            Page {{ currentPage() + 1 }} of {{ totalPages() === 0 ? 1 : totalPages() }} ({{ totalElements() }} items)
+          </div>
+          
+          <div class="pagination-buttons">
+            <button class="btn-page" [disabled]="currentPage() === 0" (click)="prevPage()">Previous</button>
+            <button class="btn-page" [disabled]="currentPage() >= totalPages() - 1" (click)="nextPage()">Next</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>

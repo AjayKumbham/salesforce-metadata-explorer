@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+  application:
+    name: salesforce-workbench-backend
+  profiles:
+    include: local
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/workbench}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+
+salesforce:
+  auth:
+    login-url: ${SALESFORCE_LOGIN_URL:https://login.salesforce.com}
+    sandbox-url: ${SALESFORCE_SANDBOX_URL:https://test.salesforce.com}
+    encryption-key: ${SALESFORCE_ENCRYPTION_KEY}
+    frontend-url: ${FRONTEND_URL:http://localhost:4200}
+    oauth:
+      client-id: ${SALESFORCE_CLIENT_ID}
+      client-secret: ${SALESFORCE_CLIENT_SECRET}
+      redirect-uri: ${SALESFORCE_REDIRECT_URI:http://localhost:8080/api/auth/oauth/callback}

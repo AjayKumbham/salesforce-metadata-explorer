@@ -1,0 +1,77 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Salesforce Workbench</h1>
+      <p>Log in to your Salesforce environment</p>
+    </div>
+
+    <form [formGroup]="loginForm" class="login-form">
+      
+      <div class="global-settings-section">
+        <div class="form-row">
+          <div class="form-group half-width">
+            <label for="environment">Environment</label>
+            <select id="environment" formControlName="environment">
+              <option value="Production">Production</option>
+              <option value="Sandbox">Sandbox</option>
+            </select>
+          </div>
+
+          <div class="form-group half-width">
+            <label for="apiVersion">API Version</label>
+            <select id="apiVersion" formControlName="apiVersion">
+              @for (version of apiVersions; track version) {
+                <option [value]="version">{{ version }}</option>
+              }
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider">
+        <span>Choose Login Method</span>
+      </div>
+
+      
+      <div class="username-password-section">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" formControlName="username" placeholder="Username" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="password" formControlName="password" placeholder="Password" />
+        </div>
+
+        <div class="form-group">
+          <label for="securityToken">Security Token (Optional)</label>
+          <input id="securityToken" type="password" formControlName="securityToken" placeholder="Security Token" />
+        </div>
+
+        @if (errorMessage()) {
+          <div class="error-message" role="alert">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="!loginForm.valid || isLoading()">
+            {{ isLoading() ? 'Logging in...' : 'Login with Username/Password' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="divider">
+        <span>OR</span>
+      </div>
+
+      
+      <div class="oauth-section">
+        <button type="button" class="btn btn-outline" (click)="loginWithOAuth()">
+          Login with Salesforce (OAuth)
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

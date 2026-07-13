@@ -1,0 +1,16 @@
+# Local development overrides — DO NOT commit this file
+# Copy this file to application-local.yml and fill in your values
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/workbench
+    username: postgres
+    password: YOUR_DB_PASSWORD
+
+salesforce:
+  auth:
+    # IMPORTANT: The encryption-key MUST be exactly 32 characters long for AES-256 to work.
+    encryption-key: "ThisIsA32CharacterSecretKeyForDev!"
+    oauth:
+      client-id: YOUR_SALESFORCE_CLIENT_ID
+      client-secret: YOUR_SALESFORCE_CLIENT_SECRET

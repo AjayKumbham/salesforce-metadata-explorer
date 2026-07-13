@@ -1,0 +1,157 @@
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #f4f6f9;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background-color: white;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.logo h1 {
+  font-size: 20px;
+  margin: 0;
+  color: #1a202c;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.username {
+  font-size: 14px;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-outline-danger {
+  background-color: white;
+  color: #e53e3e;
+  border: 1px solid #fc8181;
+}
+
+.btn-outline-danger:hover {
+  background-color: #fff5f5;
+}
+
+.dashboard-content {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.info-card {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.info-card h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 18px;
+  color: #2d3748;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #718096;
+  font-weight: 600;
+}
+
+.value {
+  font-size: 16px;
+  color: #1a202c;
+  word-break: break-all;
+}
+
+.status-active {
+  color: #38a169;
+  font-weight: 500;
+}
+
+.mt-4 {
+  margin-top: 24px;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.tool-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+.tool-card:hover {
+  background-color: #ebf8ff;
+  border-color: #90cdf4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.tool-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: white;
+  color: #3182ce;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.tool-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  color: #2d3748;
+}
+
+.tool-info p {
+  margin: 0;
+  font-size: 13px;
+  color: #718096;
+}

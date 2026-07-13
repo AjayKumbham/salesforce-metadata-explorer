@@ -1,0 +1,71 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="logo">
+      <h1>Salesforce Workbench</h1>
+    </div>
+    <div class="user-actions">
+      <span class="username">{{ user()?.username }}</span>
+      <button class="btn btn-outline-danger" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <main class="dashboard-content">
+    <section class="info-card">
+      <h2>Connection Details</h2>
+      
+      <div class="details-grid">
+        
+        <div class="detail-item">
+          <span class="label">Organization ID</span>
+          <span class="value">{{ user()?.organizationId }}</span>
+        </div>
+        
+        <div class="detail-item">
+          <span class="label">Environment</span>
+          <span class="value">{{ user()?.environment }}</span>
+        </div>
+
+        
+        <div class="detail-item">
+          <span class="label">User ID</span>
+          <span class="value">{{ user()?.userId }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">API Version</span>
+          <span class="value">{{ user()?.apiVersion }}</span>
+        </div>
+
+        
+        <div class="detail-item">
+          <span class="label">Instance URL</span>
+          <span class="value">{{ cleanInstanceUrl }}</span>
+        </div>
+        
+        <div class="detail-item">
+          <span class="label">Status</span>
+          <span class="value status-active">Active</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-card mt-4">
+      <h2>Workbench Tools</h2>
+      <div class="tools-grid">
+        <a routerLink="/metadata" class="tool-card">
+          <div class="tool-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <div class="tool-info">
+            <h3>Metadata Explorer</h3>
+            <p>Browse metadata types and components</p>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+</div>
