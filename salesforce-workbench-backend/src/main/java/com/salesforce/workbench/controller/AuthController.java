@@ -113,6 +113,6 @@ public class AuthController {
 
     @GetMapping("/health")
     public ResponseEntity<Map<String, String>> healthCheck() {
-        return ResponseEntity.ok(Map.of("status", "UP", "service", "Salesforce Workbench Backend"));
+        return ResponseEntity.ok(Map.of("status", "UP", "service", "Salesforce Metadata Explorer Backend"));
     }
 }
